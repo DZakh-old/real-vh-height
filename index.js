@@ -1,10 +1,19 @@
-setTimeout(firstViewportCorrection(), 0);
+function correctSizing() {
+  let vh = window.innerHeight;
+  if (vh > window.screen.height) vh /= window.devicePixelRatio;
+  document.documentElement.style.setProperty('--vh', `${vh * 0.01}px`);
+}
 
 function firstViewportCorrection() {
-  if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+  /* If mobile */
+  if (
+    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent
+    )
+  ) {
     correctSizing();
-    window.addEventListener('orientationchange', function() {
-      const afterOrientationChange = function() {
+    window.addEventListener('orientationchange', () => {
+      const afterOrientationChange = () => {
         correctSizing();
         window.removeEventListener('resize', afterOrientationChange);
       };
@@ -13,8 +22,4 @@ function firstViewportCorrection() {
   }
 }
 
-function correctSizing() {
-  const vh = window.innerHeight;
-  if (vh > window.screen.height) vh /= window.devicePixelRatio;
-  document.documentElement.style.setProperty('--vh', `${vh * 0.01}px`);
-}
+setTimeout(firstViewportCorrection(), 0);
