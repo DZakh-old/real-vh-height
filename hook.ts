@@ -1,17 +1,13 @@
-import React, { useState, useLayoutEffect } from 'react';
+import { useState, useLayoutEffect } from 'react';
 
-const useFirstScreenHeight = () => {
-  const [firstScreenHeight, setfirstScreenHeight] = useState('100vh');
+type ScreenHeight = '100vh' | number;
+
+const useScreenHeight = (): ScreenHeight => {
+  const [screenHeight, setScreenHeight] = useState<ScreenHeight>('100vh');
 
   useLayoutEffect(() => {
     const correctSizing = () => {
-      let vh = window.innerHeight;
-
-      if (vh > window.screen.height) {
-        vh /= window.devicePixelRatio;
-      }
-
-      setfirstScreenHeight(vh);
+      setScreenHeight(window.innerHeight);
     };
 
     const onOrientationchange = () => {
@@ -24,5 +20,7 @@ const useFirstScreenHeight = () => {
     return () => window.removeEventListener('orientationchange', onOrientationchange);
   }, []);
 
-  return firstScreenHeight;
+  return screenHeight;
 };
+
+export default useScreenHeight;
