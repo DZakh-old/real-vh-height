@@ -1,23 +1,26 @@
+/* global window, document */
+
 function correctSizing() {
-  let vh = window.innerHeight;
-  if (vh > window.screen.height) {
-    vh /= window.devicePixelRatio;
-  }
-  document.documentElement.style.setProperty('--vh', `${vh * 0.01}px`);
+  setTimeout(() => {
+    let realHeight = window.innerHeight;
+    if (realHeight > window.screen.height) {
+      realHeight /= window.devicePixelRatio;
+    }
+    document.documentElement.style.setProperty('--js-real-height', `${Math.round(realHeight)}px`);
+  });
 }
 
-function firstViewportCorrection() {
-  /* If mobile */
-  if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-    correctSizing();
-    window.addEventListener('orientationchange', () => {
-      const afterOrientationChange = () => {
-        correctSizing();
-        window.removeEventListener('resize', afterOrientationChange);
-      };
-      window.addEventListener('resize', afterOrientationChange);
-    });
+export function activateRealVhHeight() {
+  if (typeof window === 'undefined') {
+    return;
   }
-}
 
-export const activateRealVhHeight = () => setTimeout(firstViewportCorrection(), 0);
+  correctSizing();
+  window.addEventListener('orientationchange', () => {
+    const afterOrientationChange = () => {
+      correctSizing();
+      window.removeEventListener('resize', afterOrientationChange);
+    };
+    window.addEventListener('resize', afterOrientationChange);
+  });
+}
