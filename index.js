@@ -12,15 +12,20 @@ function correctSizing() {
 
 export function activateRealVhHeight() {
   if (typeof window === 'undefined') {
-    return;
+    return () => {};
   }
 
   correctSizing();
-  window.addEventListener('orientationchange', () => {
+
+  function onOrientationChange() {
     const afterOrientationChange = () => {
       correctSizing();
       window.removeEventListener('resize', afterOrientationChange);
     };
     window.addEventListener('resize', afterOrientationChange);
-  });
+  }
+
+  window.addEventListener('orientationchange', onOrientationChange);
+
+  return window.removeEventListener('resize', onOrientationChange);
 }
