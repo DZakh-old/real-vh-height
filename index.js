@@ -27,5 +27,5 @@ export function activateRealVhHeight() {
 
   window.addEventListener('orientationchange', onOrientationChange);
 
-  return window.removeEventListener('resize', onOrientationChange);
+  return () => window.removeEventListener('resize', onOrientationChange);
 }
